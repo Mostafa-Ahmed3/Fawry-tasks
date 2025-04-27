@@ -50,7 +50,7 @@ Testing one two three
 - `./mygrep.sh -vn hello testfile.txt`
 - `./mygrep.sh -v testfile.txt` (expect an error about missing search string)
 
-![Mygrep](/mygrep.jpg)
+![Mygrep](mygrep.jpg)
 ---
 
 ## 🧠 Reflection
