@@ -50,6 +50,8 @@ Testing one two three
 - `./mygrep.sh -vn hello testfile.txt`
 - `./mygrep.sh -v testfile.txt` (expect an error about missing search string)
 
+
+<img src="mygrep.jpg" alt="Alt text" width="300" height="200">
 ---
 
 ## 🧠 Reflection
