@@ -44,7 +44,7 @@ Don't match this line
 Testing one two three
 ```
 
-✅ Example screenshots to include:
+✅ Example screenshot to include:
 - `./mygrep.sh hello testfile.txt`
 - `./mygrep.sh -n hello testfile.txt`
 - `./mygrep.sh -vn hello testfile.txt`
