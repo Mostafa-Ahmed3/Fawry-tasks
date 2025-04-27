@@ -71,9 +71,3 @@ If I wanted to add features like:
 
 ### 3. Hardest Part
 The most challenging part was **correctly handling combined options** (e.g., `-vn`, `-nv`) because the order should not matter. I had to make sure my script parsed each character individually rather than expecting full-word options, mimicking real `grep` behavior.
-
----
-
-## 📚 Bonus Features
-- Support for `--help` to display usage instructions.
-- Cleaner and more flexible option parsing using `getopts`.
