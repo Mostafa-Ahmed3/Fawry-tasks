@@ -6,30 +6,6 @@
 - **Options** to show line numbers `-n`, invert matches `-v`, and combinations like `-vn` or `-nv`.
 - **Robust error handling** for missing arguments or files.
 - **Bonus features** like `--help` for usage instructions.
-
----
-
-## 📥 Usage
-
-```bash
-./mygrep.sh [options] search_string filename
-```
-
-**Options:**
-- `-n` : Show line numbers with matches.
-- `-v` : Invert match (print lines that do **not** match).
-- `--help` : Show usage information.
-
-**Examples:**
-```bash
-./mygrep.sh hello testfile.txt
-./mygrep.sh -n hello testfile.txt
-./mygrep.sh -vn hello testfile.txt
-./mygrep.sh -v testfile.txt
-```
-
-> **Note:** If the search string is missing, the script will warn the user.
-
 ---
 
 ## 📋 Hands-On Validation
@@ -49,6 +25,7 @@ Testing one two three
 - `./mygrep.sh -n hello testfile.txt`
 - `./mygrep.sh -vn hello testfile.txt`
 - `./mygrep.sh -v testfile.txt` (expect an error about missing search string)
+- `./mygrep.sh --help
 
 ![Mygrep](mygrep.jpg)
 ---
