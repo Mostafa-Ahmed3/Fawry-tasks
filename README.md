@@ -25,7 +25,7 @@ Testing one two three
 - `./mygrep.sh -n hello testfile.txt`
 - `./mygrep.sh -vn hello testfile.txt`
 - `./mygrep.sh -v testfile.txt` (expect an error about missing search string)
-- `./mygrep.sh --help
+- `./mygrep.sh --help`
 
 ![Mygrep](mygrep.jpg)
 ---
