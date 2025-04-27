@@ -1,95 +1,79 @@
-mygrep.sh is a mini version of the Unix grep command, implemented as a Bash script.
-It supports basic string searching within files with options for line numbers and inverted matches.
+# 🛠️ mygrep.sh - A Mini Grep Clone
 
-Features
-Case-insensitive search: Matches strings without considering letter case.
+## 📜 Description
+**mygrep.sh** is a lightweight version of the Unix `grep` command, built in Bash. It supports:
+- **Case-insensitive search** for a string in a text file.
+- **Options** to show line numbers `-n`, invert matches `-v`, and combinations like `-vn` or `-nv`.
+- **Robust error handling** for missing arguments or files.
+- **Bonus features** like `--help` for usage instructions.
 
-Print matching lines: Displays lines that match (or don't match) the search string.
+---
 
-Supported Options:
+## 📥 Usage
 
--n: Show line numbers for each matching line.
-
--v: Invert the match (show lines that do not match the search string).
-
-Options can be combined (-vn, -nv).
-
-Usage
-bash
-Copy
-Edit
+```bash
 ./mygrep.sh [options] search_string filename
-Examples
-Basic search:
+```
 
-bash
-Copy
-Edit
+**Options:**
+- `-n` : Show line numbers with matches.
+- `-v` : Invert match (print lines that do **not** match).
+- `--help` : Show usage information.
+
+**Examples:**
+```bash
 ./mygrep.sh hello testfile.txt
-Search with line numbers:
-
-bash
-Copy
-Edit
 ./mygrep.sh -n hello testfile.txt
-Inverted search with line numbers:
-
-bash
-Copy
-Edit
 ./mygrep.sh -vn hello testfile.txt
-Missing search string (should display an error):
-
-bash
-Copy
-Edit
 ./mygrep.sh -v testfile.txt
-Requirements
-Bash shell
+```
 
-Executable permissions on mygrep.sh (chmod +x mygrep.sh)
+> **Note:** If the search string is missing, the script will warn the user.
 
-Error Handling
-The script checks and reports:
+---
 
-Missing arguments
+## 📋 Hands-On Validation
 
-Non-existent or unreadable files
-
-Invalid usage patterns
-
-Hands-On Validation
-Use the following testfile.txt content for testing:
-
-arduino
-Copy
-Edit
+Tested using a `testfile.txt` with contents:
+```
 Hello world
 This is a test
 another test line
 HELLO AGAIN
 Don't match this line
 Testing one two three
-Ensure the script behaves correctly with the examples provided above.
+```
 
-Reflective Section
-Handling Arguments and Options:
+✅ Example screenshots to include:
+- `./mygrep.sh hello testfile.txt`
+- `./mygrep.sh -n hello testfile.txt`
+- `./mygrep.sh -vn hello testfile.txt`
+- `./mygrep.sh -v testfile.txt` (expect an error about missing search string)
 
-The script parses command-line arguments manually or with getopts (bonus).
+---
 
-It identifies options first, then the search string, and finally the filename.
+## 🧠 Reflection
 
-If Supporting Regex or More Options (-i, -c, -l):
+### 1. Argument and Option Handling Breakdown
+- If `--help` is passed at any time, display usage information and exit.
+- Options (`-n`, `-v`, or combinations like `-vn`) are parsed first.
+- Then the script checks for the search string and filename.
+- If arguments are missing or file doesn't exist, it shows an error.
+- Searching is performed using `grep -i`, with flags added based on the parsed options.
 
-I would redesign argument parsing to be more modular, possibly using getopts.
+### 2. Supporting Additional Options
+If I wanted to add features like:
+- `-i` (ignore case, already somewhat done),
+- `-c` (count number of matching lines),
+- `-l` (list only filenames with matches),
 
-Introduce internal flags for regex handling and result aggregation (count/match/line listing).
+...I would refactor the script to fully rely on `getopts`, allowing easy parsing of each new flag and maintaining a cleaner structure. Also, I'd build dynamic `grep` command strings based on active flags.
 
-Hardest Part:
+### 3. Hardest Part
+The most challenging part was **correctly handling combined options** (e.g., `-vn`, `-nv`) because the order should not matter. I had to make sure my script parsed each character individually rather than expecting full-word options, mimicking real `grep` behavior.
 
-Handling combinations of options cleanly (-vn, -nv) without rewriting parsing logic for every case.
+---
 
-Bonus
---help flag supported: Displays a help message with usage instructions.
-
-Improved option parsing using getopts for cleaner, scalable argument management.
+## 📚 Bonus Features
+- Support for `--help` to display usage instructions.
+- Cleaner and more flexible option parsing using `getopts`.
