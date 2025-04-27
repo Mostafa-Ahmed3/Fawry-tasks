@@ -8,18 +8,16 @@ print_usage() {
   echo "  --help Show this help message"
 }
 
-# Default options
 show_line_number=false
 invert_match=false
 
-# Parse options
 while [[ "$1" == -* ]]; do
   case "$1" in
     -n) show_line_number=true ;;
     -v) invert_match=true ;;
     --help) print_usage; exit 0 ;;
     -*) 
-      # Handle combined options like -vn or -nv
+
       optstring="${1#-}"
       for (( i=0; i<${#optstring}; i++ )); do
         case "${optstring:$i:1}" in
@@ -33,11 +31,9 @@ while [[ "$1" == -* ]]; do
   shift
 done
 
-# Now $1 should be search_string, $2 should be filename
 search_string="$1"
 filename="$2"
 
-# Validate input
 if [[ -z "$search_string" || -z "$filename" ]]; then
   echo "Error: Missing search string or filename."
   print_usage
@@ -49,7 +45,6 @@ if [[ ! -f "$filename" ]]; then
   exit 1
 fi
 
-# Main functionality
 line_number=0
 while IFS= read -r line; do
   ((line_number++))
@@ -59,7 +54,6 @@ while IFS= read -r line; do
     match=false
   fi
 
-  # Invert match if needed
   if $invert_match; then
     match=$(! $match && echo true || echo false)
   fi
