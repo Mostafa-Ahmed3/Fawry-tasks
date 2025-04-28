@@ -1,4 +1,4 @@
-# 🛠️ mygrep.sh - A Mini Grep Clone
+# 🛠️ Q1 : Custom Command (mygrep.sh)
 
 ## 📜 Description
 **mygrep.sh** is a lightweight version of the Unix `grep` command, built in Bash. It supports:
@@ -49,3 +49,6 @@ If I wanted to add features like:
 
 ### 3. Hardest Part
 The most challenging part was **correctly handling combined options** (e.g., `-vn`, `-nv`) because the order should not matter. I had to make sure my script parsed each character individually rather than expecting full-word options, mimicking real `grep` behavior.
+
+--------------------------------------
+# Q2 : Scenario
