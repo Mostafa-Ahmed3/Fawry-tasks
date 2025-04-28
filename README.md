@@ -53,9 +53,9 @@ The most challenging part was **correctly handling combined options** (e.g., `-v
 --------------------------------------
 # 🛠️ Internal Dashboard Unreachability Troubleshooting Guide
 
----
-
 ## 1. Verify DNS Resolution
+
+![resolv.conf.jpg](resolv.conf.jpg)
 
 ### Compare DNS Resolution:
 
@@ -63,13 +63,13 @@ The most challenging part was **correctly handling combined options** (e.g., `-v
   ```bash
   dig internal.example.com
   ```
+  ![dig internal.example.com.jpg](dig%20internal.example.com.jpg)
 
 - **Check using Google's Public DNS (8.8.8.8):**
   ```bash
-  dig @8.8.8.8 internal.example.com
+  dig @192.168.138.2 internal.example.com
   ```
-
-> 📷 Screenshot: Capture both outputs for comparison.
+![dig @192.168.138.2 internal.example.com.jpg](dig%20@192.168.138.2%20internal.example.com.jpg)
 
 ---
 
