@@ -51,7 +51,7 @@ If I wanted to add features like:
 The most challenging part was **correctly handling combined options** (e.g., `-vn`, `-nv`) because the order should not matter. I had to make sure my script parsed each character individually rather than expecting full-word options, mimicking real `grep` behavior.
 
 --------------------------------------
-# 🛠️ Internal Dashboard Unreachability Troubleshooting Guide
+# 🛠️ Q2 : Scenario
 
 ## 1. Verify DNS Resolution
 
