@@ -110,7 +110,6 @@ The most challenging part was **correctly handling combined options** (e.g., `-v
 | DNS    | Split-horizon DNS issue (internal zone not resolving) |
 | Network| Firewall blocking DNS (port 53) or HTTP/HTTPS        |
 | Network| Routing issues between client and server             |
-| Service| Web service down or misconfigured                    |
 | Host   | Service listening only on `localhost` (127.0.0.1)    |
 | Host   | SELinux or firewall rules blocking access            |
 
@@ -156,17 +155,20 @@ The most challenging part was **correctly handling combined options** (e.g., `-v
   ```bash
   sudo systemctl restart systemd-resolved
   ```
+![dig @192.168.138.2 internal.example.com.jpg](dig%20@192.168.138.2%20internal.example.com.jpg)
 
 ---
 
 ### 3. Split-horizon DNS Issue
 
 - **Confirm:**
-  Compare DNS results from internal vs external DNS servers.
+  Compare DNS results from internal vs external DNS servers (Using dig @dns internal.example.com)
 
 - **Fix:**
   Update internal DNS zone configuration to properly resolve `internal.example.com`.
 
+![dig internal.example.com.jpg](dig%20internal.example.com.jpg)
+![dig @192.168.138.2 internal.example.com.jpg](dig%20@192.168.138.2%20internal.example.com.jpg)
 ---
 
 ### 4. Firewall Blocking
@@ -236,6 +238,7 @@ The most challenging part was **correctly handling combined options** (e.g., `-v
   ```
   192.168.138.10 internal.example.com
   ```
+![-etc-hosts.jpg](-etc-hosts.jpg)
 
 - **Test:**
   ```bash
@@ -269,7 +272,5 @@ The most challenging part was **correctly handling combined options** (e.g., `-v
 ---
 
 # 📷 Required Screenshots
-- `/etc/resolv.conf` content
-- `/etc/hosts` modification
 - DNS service status (`systemd-resolved` or internal DNS server)
 - Firewall rules showing open ports
