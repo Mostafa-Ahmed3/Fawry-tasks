@@ -97,8 +97,7 @@ The most challenging part was **correctly handling combined options** (e.g., `-v
   ```bash
   sudo ss -tuln | grep ':80\|:443'
   ```
-
-> 📷 Screenshot: Show curl or telnet output and ss output.
+![Diagnose-Service-Reachability.jpg](Diagnose-Service-Reachability.jpg)
 
 ---
 
