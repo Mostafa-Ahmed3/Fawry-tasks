@@ -198,21 +198,13 @@ The most challenging part was **correctly handling combined options** (e.g., `-v
   ```
 - **Fix:**
   Update routing tables or investigate intermediate routers/firewalls.
-
----
-
-### 6. Service Binding Only on 127.0.0.1
-
-- **Confirm:**
   ```bash
-  ss -tuln | grep ':80\|:443'
+  sudo ip route add 192.168.1.0/24 via 192.168.138.2
   ```
-- **Fix:**
-  Edit service config to bind to `0.0.0.0` (all interfaces).
 
 ---
 
-### 7. SELinux or Firewall Restrictions
+### 6. SELinux or Firewall Restrictions
 
 - **Confirm:**
   ```bash
@@ -248,29 +240,17 @@ The most challenging part was **correctly handling combined options** (e.g., `-v
 
 ---
 
-### Persist DNS Settings (Systemd-resolved or NetworkManager)
+### Persist DNS Settings (Systemd-resolved)
 
 - **Using systemd-resolved:**
   - Create or edit `/etc/systemd/resolved.conf`
     ```bash
     [Resolve]
-    DNS=10.0.0.2
+    DNS=192.168.138.2
     FallbackDNS=8.8.8.8
     ```
   - Restart service:
     ```bash
     sudo systemctl restart systemd-resolved
     ```
-
-- **Using NetworkManager:**
-  ```bash
-  nmcli con show
-  nmcli con mod <connection-name> ipv4.dns "10.0.0.2 8.8.8.8"
-  nmcli con up <connection-name>
-  ```
-
----
-
-# 📷 Required Screenshots
-- DNS service status (`systemd-resolved` or internal DNS server)
-- Firewall rules showing open ports
+![-etc-systemd-resolved.conf.jpg](-etc-systemd-resolved.conf.jpg)
