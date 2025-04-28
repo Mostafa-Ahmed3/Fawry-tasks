@@ -51,4 +51,250 @@ If I wanted to add features like:
 The most challenging part was **correctly handling combined options** (e.g., `-vn`, `-nv`) because the order should not matter. I had to make sure my script parsed each character individually rather than expecting full-word options, mimicking real `grep` behavior.
 
 --------------------------------------
-# Q2 : Scenario
+# 🛠️ Internal Dashboard Unreachability Troubleshooting Guide
+
+---
+
+## 1. Verify DNS Resolution
+
+### Compare DNS Resolution:
+
+- **Check using system's configured DNS:**
+  ```bash
+  dig internal.example.com
+  ```
+
+- **Check using Google's Public DNS (8.8.8.8):**
+  ```bash
+  dig @8.8.8.8 internal.example.com
+  ```
+
+> 📷 Screenshot: Capture both outputs for comparison.
+
+---
+
+## 2. Diagnose Service Reachability
+
+### Steps to Confirm Web Service is Listening:
+
+- **Resolve the IP address manually (if dig was successful):**
+  ```bash
+  dig +short internal.example.com
+  ```
+
+- **Check if the port is open (port 80 or 443):**
+  ```bash
+  curl -v http://internal.example.com
+  ```
+
+  or
+
+  ```bash
+  telnet internal.example.com 80
+  ```
+
+  or using `ss` to check locally:
+  ```bash
+  sudo ss -tuln | grep ':80\|:443'
+  ```
+
+> 📷 Screenshot: Show curl or telnet output and ss output.
+
+---
+
+## 3. Trace the Issue – List All Possible Causes
+
+| Layer  | Potential Cause                                      |
+|--------|------------------------------------------------------|
+| DNS    | Misconfigured `/etc/resolv.conf`                     |
+| DNS    | Internal DNS server outage or misconfiguration       |
+| DNS    | Split-horizon DNS issue (internal zone not resolving) |
+| Network| Firewall blocking DNS (port 53) or HTTP/HTTPS        |
+| Network| Routing issues between client and server             |
+| Service| Web service down or misconfigured                    |
+| Host   | Service listening only on `localhost` (127.0.0.1)    |
+| Host   | SELinux or firewall rules blocking access            |
+
+---
+
+## 4. Propose and Apply Fixes
+
+### For Each Potential Cause:
+
+---
+
+### 1. Misconfigured `/etc/resolv.conf`
+
+- **Confirm:**
+  ```bash
+  cat /etc/resolv.conf
+  ```
+- **Fix:**
+  Edit `/etc/resolv.conf` to correct DNS servers:
+  ```bash
+  sudo nano /etc/resolv.conf
+  ```
+  Example entry:
+  ```
+  nameserver 10.0.0.2
+  ```
+
+---
+
+### 2. Internal DNS Server Outage
+
+- **Confirm:**
+  ```bash
+  dig @<internal-dns-ip> internal.example.com
+  ```
+- **Fix:**
+  Restart DNS service on internal server:
+  ```bash
+  sudo systemctl restart named
+  ```
+  (for BIND) or
+  ```bash
+  sudo systemctl restart systemd-resolved
+  ```
+
+---
+
+### 3. Split-horizon DNS Issue
+
+- **Confirm:**
+  Compare DNS results from internal vs external DNS servers.
+
+- **Fix:**
+  Update internal DNS zone configuration to properly resolve `internal.example.com`.
+
+---
+
+### 4. Firewall Blocking
+
+- **Confirm:**
+  ```bash
+  sudo iptables -L -n | grep 53
+  sudo iptables -L -n | grep 80
+  sudo iptables -L -n | grep 443
+  ```
+- **Fix:**
+  Open necessary ports:
+  ```bash
+  sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+  sudo iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+  sudo iptables -A INPUT -p udp --dport 53 -j ACCEPT
+  sudo iptables -A INPUT -p tcp --dport 53 -j ACCEPT
+  ```
+
+---
+
+### 5. Routing Issues
+
+- **Confirm:**
+  ```bash
+  traceroute internal.example.com
+  ```
+- **Fix:**
+  Update routing tables or investigate intermediate routers/firewalls.
+
+---
+
+### 6. Web Service Misconfiguration
+
+- **Confirm:**
+  Check if service is listening:
+  ```bash
+  sudo systemctl status nginx
+  sudo systemctl status apache2
+  ```
+
+- **Fix:**
+  Restart web service:
+  ```bash
+  sudo systemctl restart nginx
+  ```
+  or
+  ```bash
+  sudo systemctl restart apache2
+  ```
+
+---
+
+### 7. Service Binding Only on 127.0.0.1
+
+- **Confirm:**
+  ```bash
+  ss -tuln | grep ':80\|:443'
+  ```
+- **Fix:**
+  Edit service config to bind to `0.0.0.0` (all interfaces).
+
+---
+
+### 8. SELinux or Firewall Restrictions
+
+- **Confirm:**
+  ```bash
+  sudo getenforce
+  ```
+- **Fix:**
+  Set SELinux to permissive temporarily:
+  ```bash
+  sudo setenforce 0
+  ```
+  *(Permanent changes should adjust SELinux policies instead.)*
+
+---
+
+# 🏆 Bonus Tasks
+
+### Configure Local `/etc/hosts` Entry for Testing
+
+- **Edit `/etc/hosts`:**
+  ```bash
+  sudo nano /etc/hosts
+  ```
+  Add:
+  ```
+  10.0.0.5 internal.example.com
+  ```
+
+- **Test:**
+  ```bash
+  ping internal.example.com
+  curl http://internal.example.com
+  ```
+
+---
+
+### Persist DNS Settings (Systemd-resolved or NetworkManager)
+
+- **Using systemd-resolved:**
+  - Create or edit `/etc/systemd/resolved.conf`
+    ```bash
+    [Resolve]
+    DNS=10.0.0.2
+    FallbackDNS=8.8.8.8
+    ```
+  - Restart service:
+    ```bash
+    sudo systemctl restart systemd-resolved
+    ```
+
+- **Using NetworkManager:**
+  ```bash
+  nmcli con show
+  nmcli con mod <connection-name> ipv4.dns "10.0.0.2 8.8.8.8"
+  nmcli con up <connection-name>
+  ```
+
+---
+
+# 📷 Required Screenshots
+
+- `dig` comparisons (internal vs 8.8.8.8)
+- `curl`, `telnet`, or `ss` outputs
+- `/etc/resolv.conf` content
+- `/etc/hosts` modification
+- DNS service status (`systemd-resolved` or internal DNS server)
+- Firewall rules showing open ports
