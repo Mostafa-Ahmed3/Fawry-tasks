@@ -59,13 +59,13 @@ The most challenging part was **correctly handling combined options** (e.g., `-v
 
 ### Compare DNS Resolution:
 
-- **Check using system's configured DNS:**
+- **Check using Google's Public DNS (8.8.8.8):**
   ```bash
   dig internal.example.com
   ```
   ![dig internal.example.com.jpg](dig%20internal.example.com.jpg)
 
-- **Check using Google's Public DNS (8.8.8.8):**
+- **Check using system's configured DNS:**
   ```bash
   dig @192.168.138.2 internal.example.com
   ```
@@ -131,12 +131,13 @@ The most challenging part was **correctly handling combined options** (e.g., `-v
 - **Fix:**
   Edit `/etc/resolv.conf` to correct DNS servers:
   ```bash
-  sudo nano /etc/resolv.conf
+  sudo vi /etc/resolv.conf
   ```
   Example entry:
   ```
-  nameserver 10.0.0.2
+  nameserver 8.8.8.8
   ```
+![-etc-resolv.conf.jpg](-etc-resolv.conf.jpg)
 
 ---
 
@@ -198,28 +199,7 @@ The most challenging part was **correctly handling combined options** (e.g., `-v
 
 ---
 
-### 6. Web Service Misconfiguration
-
-- **Confirm:**
-  Check if service is listening:
-  ```bash
-  sudo systemctl status nginx
-  sudo systemctl status apache2
-  ```
-
-- **Fix:**
-  Restart web service:
-  ```bash
-  sudo systemctl restart nginx
-  ```
-  or
-  ```bash
-  sudo systemctl restart apache2
-  ```
-
----
-
-### 7. Service Binding Only on 127.0.0.1
+### 6. Service Binding Only on 127.0.0.1
 
 - **Confirm:**
   ```bash
@@ -230,7 +210,7 @@ The most challenging part was **correctly handling combined options** (e.g., `-v
 
 ---
 
-### 8. SELinux or Firewall Restrictions
+### 7. SELinux or Firewall Restrictions
 
 - **Confirm:**
   ```bash
@@ -241,7 +221,6 @@ The most challenging part was **correctly handling combined options** (e.g., `-v
   ```bash
   sudo setenforce 0
   ```
-  *(Permanent changes should adjust SELinux policies instead.)*
 
 ---
 
@@ -251,11 +230,11 @@ The most challenging part was **correctly handling combined options** (e.g., `-v
 
 - **Edit `/etc/hosts`:**
   ```bash
-  sudo nano /etc/hosts
+  sudo vi /etc/hosts
   ```
   Add:
   ```
-  10.0.0.5 internal.example.com
+  192.168.138.10 internal.example.com
   ```
 
 - **Test:**
@@ -290,9 +269,6 @@ The most challenging part was **correctly handling combined options** (e.g., `-v
 ---
 
 # 📷 Required Screenshots
-
-- `dig` comparisons (internal vs 8.8.8.8)
-- `curl`, `telnet`, or `ss` outputs
 - `/etc/resolv.conf` content
 - `/etc/hosts` modification
 - DNS service status (`systemd-resolved` or internal DNS server)
