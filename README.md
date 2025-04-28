@@ -151,10 +151,7 @@ The most challenging part was **correctly handling combined options** (e.g., `-v
   ```bash
   sudo systemctl restart named
   ```
-  (for BIND) or
-  ```bash
-  sudo systemctl restart systemd-resolved
-  ```
+
 ![dig @192.168.138.2 internal.example.com.jpg](dig%20@192.168.138.2%20internal.example.com.jpg)
 
 ---
